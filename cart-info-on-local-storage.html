@@ -1,0 +1,56 @@
+  <h3>Optional Information</h3> 
+                          
+  <div class="cart_input">
+  <label>Purchase Order</label>
+  <input type="text" name="attributes[purchase-order]" value="{{ cart.attributes.purchase-order }}" id="purchaseOrder"/>
+  </div>
+  <div class="cart_input">
+  <label>Department Contact</label>
+  <input type="text" name="attributes[department-contact]" value="{{ cart.attributes.department-contact }}" id="departmentContact"/>
+  </div>
+  <div class="cart_input">                        
+  <label>UPS Collect Account</label>
+  <input type="text" name="attributes[usp-code]" value="{{ cart.attributes.usp-code }}" id="uspCode"/>
+  </div>
+  <div class="cart_input">
+  <label>Tax Exemption</label>
+  <input type="checkbox" name="attributes[tax-exemption]" value="{{ cart.attributes.text-exemption }}" id="taxExemption"/>
+    <p>MDS will contact you for a copy of your tax-exempt form. Total will be adjusted when order processed internally.</p>
+  </div>                       
+  </form>
+</cart-items>
+
+ <script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const input = document.querySelectorAll('.cart_input input, .cart_input textarea');
+
+    const storedObject = {
+      purchaseOrder: "",
+      departmentContact: "",
+      uspCode: "",
+      taxExemption: "",
+      cartNote:""
+    };
+    
+    const getData = JSON.parse(localStorage.getItem("cartData"));
+
+   if(getData != null){
+    document.getElementById('purchaseOrder').value = getData.purchaseOrder;
+    document.getElementById('departmentContact').value = getData.departmentContact;
+    document.getElementById('uspCode').value = getData.uspCode;
+    document.getElementById('taxExemption').setAttribute('checked', getData.taxExemption === "true" ? true : false);
+    document.getElementById('cartNote').value = getData.cartNote; 
+   }
+  
+    input.forEach((elem) => {
+      elem.addEventListener('change', (event) => {
+        console.log(event.target.type);
+        if(event.target.type == 'checkbox'){
+          console.log(typeof(event.target.checked.toString()));
+        }
+        storedObject[event.target.id] = event.target.type === 'checkbox' ? event.target.checked.toString() : event.target.value;
+        localStorage.setItem("cartData", JSON.stringify(storedObject));
+      });
+    });
+  });
+</script> 
